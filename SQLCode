@@ -1,0 +1,641 @@
+--Monthly overall data
+Select *
+from VicPortfolio..[GiD-jan2022]
+
+Select *
+from VicPortfolio..[GiD-feb2022]
+
+Select *
+from VicPortfolio..[GiD-mar2022]
+
+Select *
+from VicPortfolio..[GiD-apr2022]
+
+--To delete table
+Drop Table [GiD-jan2022]
+Drop Table [GiD-feb2022]
+Drop Table [GiD-mar2022]
+Drop Table [GiD-apr2022]
+
+
+/*Cleaning Data in SQL Query*/
+--------------------------------- 1.Standardize date format
+---January
+Alter Table [GiD-jan2022]
+Add [New Created Date] Date;
+
+Update VicPortfolio..[GiD-jan2022]
+Set [New Created Date] = Convert (Date, [Created Date])
+
+Alter Table [GiD-jan2022]
+Add [New Updated Date] Date;
+
+Update VicPortfolio..[GiD-jan2022]
+Set [New Updated Date] = Convert (Date, [Updated Date])
+
+---February
+Alter Table [GiD-feb2022]
+Add [New Created Date] Date;
+
+Update VicPortfolio..[GiD-feb2022]
+Set [New Created Date] = Convert (Date, [Created Date])
+
+Alter Table [GiD-feb2022]
+Add [New Updated Date] Date;
+
+Update VicPortfolio..[GiD-feb2022]
+Set [New Updated Date] = Convert (Date, [Updated Date])
+
+
+---March
+Alter Table [GiD-mar2022]
+Add [New Created Date] Date;
+
+Update VicPortfolio..[GiD-mar2022]
+Set [New Created Date] = Convert (Date, [Created Date])
+
+Alter Table [GiD-mar2022]
+Add [New Updated Date] Date;
+
+Update VicPortfolio..[GiD-mar2022]
+Set [New Updated Date] = Convert (Date, [Updated Date])
+
+---April
+Alter Table [GiD-apr2022]
+Add [New Created Date] Date;
+
+Update VicPortfolio..[GiD-apr2022]
+Set [New Created Date] = Convert (Date, [Created Date])
+
+Alter Table [GiD-apr2022]
+Add [New Updated Date] Date;
+
+Update VicPortfolio..[GiD-apr2022]
+Set [New Updated Date] = Convert (Date, [Updated Date])
+
+
+---------------------------- 2.Change Y and N to Yes and No in "SLA Met" field
+
+Select Distinct[SLA Met], COUNT ([SLA Met])
+From VicPortfolio..[GiD-apr2022]
+Group by [SLA Met]
+Order by 2
+
+Select [SLA Met],
+CASE When [SLA Met] = 'Y' THEN 'Yes'
+	 When [SLA Met] = 'N' THEN 'No'
+	 ELSE [SLA Met]
+	 END
+From VicPortfolio..[GiD-apr2022]
+
+
+UPDATE VicPortfolio..[GiD-apr2022]
+SET [SLA Met] = CASE When [SLA Met] = 'Y' THEN 'Yes'
+	   When [SLA Met] = 'N' THEN 'No'
+	   ELSE [SLA Met]
+	   END
+	   
+
+--------------------------------- 3. Delete Unused Column
+Alter Table VicPortfolio..[GiD-jan2022]
+Drop Column [Created Date], [Updated Date], [Resolved]
+
+Alter Table VicPortfolio..[GiD-feb2022]
+Drop Column [Created Date], [Updated Date], [Resolved]
+
+Alter Table VicPortfolio..[GiD-mar2022]
+Drop Column [Created Date], [Updated Date], [Resolved]
+
+Alter Table VicPortfolio..[GiD-apr2022]
+Drop Column [Created Date], [Updated Date], [Resolved]
+-----------------------------------------------------------------
+
+
+--To show total tickets count for each month
+
+Select ([Month Of Ticket]) ,COUNT([issue id]) AS 'Total Ticket'
+From VicPortfolio..[GiD-jan2022]
+Group by ([Month Of Ticket])
+
+Select ([Month Of Ticket]) ,COUNT([issue id]) AS 'Total Ticket'
+From VicPortfolio..[GiD-feb2022]
+Group by ([Month Of Ticket])
+
+Select ([Month Of Ticket]) ,COUNT([issue id]) AS 'Total Ticket'
+From VicPortfolio..[GiD-mar2022]
+Group by ([Month Of Ticket])
+
+Select ([Month Of Ticket]) ,COUNT([issue id]) AS 'Total Ticket'
+From VicPortfolio..[GiD-apr2022]
+Group by ([Month Of Ticket])
+
+--Total Tickets done by each Assignee in January
+
+Select ([Assignee]), COUNT([issue key]) AS 'Total Ticket'
+From VicPortfolio..[GiD-jan2022]
+Group by ([Assignee])
+
+--Total Tickets done by each Assignee in February
+
+Select ([Assignee]), COUNT([issue key]) AS 'Total Ticket'
+From VicPortfolio..[GiD-feb2022]
+Group by ([Assignee])
+
+--Total Tickets done by each Assignee in March
+
+Select ([Assignee]), COUNT([issue key]) AS 'Total Ticket'
+From VicPortfolio..[GiD-mar2022]
+Group by ([Assignee])
+
+--Total Tickets done by each Assignee in April
+
+Select ([Assignee]), COUNT([issue key]) AS 'Total Ticket'
+From VicPortfolio..[GiD-apr2022]
+Group by ([Assignee])
+
+
+--Total Tickets from each Labels in January
+
+Select ([Labels]), COUNT([Labels]) AS 'Total Ticket'
+From VicPortfolio..[GiD-jan2022]
+Group by ([Labels])
+
+--Total Tickets from each Labels in February
+
+Select ([Labels]), COUNT([Labels]) AS 'Total Ticket'
+From VicPortfolio..[GiD-feb2022]
+Group by ([Labels])
+
+--Total Tickets from each Labels in March
+
+Select ([Labels]), COUNT([Labels]) AS 'Total Ticket'
+From VicPortfolio..[GiD-mar2022]
+Group by ([Labels])
+
+--Total Tickets from each Labels in April
+
+Select ([Labels]), COUNT([Labels]) AS 'Total Ticket'
+From VicPortfolio..[GiD-apr2022]
+Group by ([Labels])
+
+
+--Total of Ticket types in January
+
+Select ([Ticket Types]),COUNT([Ticket Types]) AS 'Total Ticket'
+From VicPortfolio..[GiD-jan2022]
+Group by ([Ticket Types])
+Order by 2
+
+--Total of Ticket types in February
+
+Select ([Ticket Types]),COUNT([Ticket Types]) AS 'Total Ticket'
+From VicPortfolio..[GiD-feb2022]
+Group by ([Ticket Types])
+Order by 2
+
+--Total of Ticket types in March
+
+Select ([Ticket Types]),COUNT([Ticket Types]) AS 'Total Ticket'
+From VicPortfolio..[GiD-mar2022]
+Group by ([Ticket Types])
+Order by 2
+
+--Total of Ticket types in April
+
+Select ([Ticket Types]),COUNT([Ticket Types]) AS 'Total Ticket'
+From VicPortfolio..[GiD-apr2022]
+Group by ([Ticket Types])
+Order by 2
+
+
+
+--Total of Issue Types in  in January
+
+Select ([Issue Type]) ,COUNT([Issue Type]) AS 'TotalIssueType'
+From VicPortfolio..[GiD-jan2022]
+Group by ([Issue Type])
+Order by 2
+
+--Total of Issue Types in  in February
+Select ([Issue Type]) ,COUNT([Issue Type]) AS 'TotalIssueType'
+From VicPortfolio..[GiD-feb2022]
+Group by ([Issue Type])
+Order by 2
+
+--Total of Issue Types in  in March
+Select ([Issue Type]) ,COUNT([Issue Type]) AS 'TotalIssueType'
+From VicPortfolio..[GiD-mar2022]
+Group by ([Issue Type])
+Order by 2
+
+--Total of Issue Types in  in April
+Select ([Issue Type]) ,COUNT([Issue Type]) AS 'TotalIssueType'
+From VicPortfolio..[GiD-apr2022]
+Group by ([Issue Type])
+Order by 2
+
+
+--Total tickets per week in January
+Select ([Week]) ,COUNT([Issue key]) AS 'TotalTicket'
+From VicPortfolio..[GiD-jan2022] 
+Group by ([Week])
+
+--Total tickets per week in February
+Select ([Week]) ,COUNT([Issue key]) AS 'TotalTicket'
+From VicPortfolio..[GiD-feb2022] 
+Group by ([Week])
+
+--Total tickets per week in March
+Select ([Week]) ,COUNT([Issue key]) AS 'TotalTicket'
+From VicPortfolio..[GiD-mar2022] 
+Group by ([Week])
+
+--Total tickets per week in April
+Select ([Week]) ,COUNT([Issue key]) AS 'TotalTicket'
+From VicPortfolio..[GiD-apr2022] 
+Group by ([Week])
+
+
+--Total of Ticket Status in January
+Select ([Status]) ,COUNT([Issue key]) AS 'TotalTicket'
+From VicPortfolio..[GiD-jan2022] 
+Group by ([Status])
+Order by 2
+
+--Total of Ticket Status in February
+Select ([Status]) ,COUNT([Issue key]) AS 'TotalTicket'
+From VicPortfolio..[GiD-feb2022] 
+Group by ([Status])
+Order by 2
+
+--Total of Ticket Status in March
+Select ([Status]) ,COUNT([Issue key]) AS 'TotalTicket'
+From VicPortfolio..[GiD-mar2022] 
+Group by ([Status])
+Order by 2
+
+--Total of Ticket Status in April
+Select ([Status]) ,COUNT([Issue key]) AS 'TotalTicket'
+From VicPortfolio..[GiD-apr2022] 
+Group by ([Status])
+Order by 2
+
+
+/*--Tickets Created Time in January
+Select ([Created Date]),([Issue key]),([Issue id]),([Issue Type]),([Status]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Week])
+From VicPortfolio..[GiD-jan2022] 
+Order By 1,2*/
+
+/*--Tickets Created Time in February
+Select ([Created Date]),([Issue key]),([Issue id]),([Issue Type]),([Status]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Week])
+From VicPortfolio..[GiD-feb2022] 
+Order By 1,2
+*/
+
+--Weeks in January 
+Select ([Week]),([Issue key]),([Issue id]),([Issue Type]),([Status]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Created Date])
+From VicPortfolio..[GiD-jan2022] 
+Order By 1,2
+
+--Weeks in February 
+Select ([Week]),([Issue key]),([Issue id]),([Issue Type]),([Status]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Created Date])
+From VicPortfolio..[GiD-feb2022] 
+Order By 1,2
+
+--Weeks in March 
+Select ([Week]),([Issue key]),([Issue id]),([Issue Type]),([Status]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Created Date])
+From VicPortfolio..[GiD-mar2022] 
+Order By 1,2
+
+--Weeks in April 
+Select ([Week]),([Issue key]),([Issue id]),([Issue Type]),([Status]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Created Date])
+From VicPortfolio..[GiD-apr2022] 
+Order By 1,2
+
+
+--Support Level for Total Tickets in January
+Select ([Support Level]), COUNT([Issue key]) AS 'TotalTicket'
+From VicPortfolio..[GiD-jan2022] 
+Group by ([Support Level])
+
+ 
+--Support Level for Total Tickets in February
+Select ([Support Level]), COUNT([Issue key]) AS 'TotalTicket'
+From VicPortfolio..[GiD-feb2022] 
+Group by ([Support Level])
+
+--Support Level for Total Tickets in March
+Select ([Support Level]), COUNT([Issue key]) AS 'TotalTicket'
+From VicPortfolio..[GiD-mar2022] 
+Group by ([Support Level])
+
+--Support Level for Total Tickets in April
+Select ([Support Level]), COUNT([Issue key]) AS 'TotalTicket'
+From VicPortfolio..[GiD-apr2022] 
+Group by ([Support Level])
+
+	
+
+--Rolling Count of Tickets for each week in January 
+Select ([Week]), COUNT([Issue key]) OVER (Partition by ([Week]) ORDER BY ([Week]),([Issue id])) AS 'RollingTicket', 
+([Issue key]),([Issue id]),([Issue Type]),([Status]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Created Date])
+From VicPortfolio..[GiD-jan2022] 
+Order By 3,4
+
+--Rolling Count of Tickets for each week in February
+Select ([Week]), COUNT([Issue key]) OVER (Partition by ([Week]) ORDER BY ([Week]),([Issue id])) AS 'RollingTicket', 
+([Issue key]),([Issue id]),([Issue Type]),([Status]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Created Date])
+From VicPortfolio..[GiD-feb2022]
+Order By 3,4
+
+--Rolling Count of Tickets for each week in March
+Select ([Week]), COUNT([Issue key]) OVER (Partition by ([Week]) ORDER BY ([Week]),([Issue id])) AS 'RollingTicket', 
+([Issue key]),([Issue id]),([Issue Type]),([Status]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Created Date])
+From VicPortfolio..[GiD-mar2022]
+Order By 3,4
+
+--Rolling Count of Tickets for each week in April
+Select ([Week]), COUNT([Issue key]) OVER (Partition by ([Week]) ORDER BY ([Week]),([Issue id])) AS 'RollingTicket', 
+([Issue key]),([Issue id]),([Issue Type]),([Status]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Created Date])
+From VicPortfolio..[GiD-apr2022]
+Order By 3,4
+
+
+--Using CTE to get the max rolling ticket count per week vs 
+--total ticket count for all the weeks in January in Percentage  
+/*
+With WeeksVSMonth ([Week],[RollingTicket],[Issue key],[Issue id],[Issue Type],[Status],[Assignee],
+[Support Level],[Labels],[Ticket Types],[Month of Ticket],[Created Date])
+as
+(
+Select ([Week]), COUNT([Issue key]) OVER (Partition by ([Week]) ORDER BY ([Week]),([Issue id])) AS 'RollingTicket', 
+([Issue key]),([Issue id]),([Issue Type]),([Status]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Created Date])
+From VicPortfolio..[GiD-jan2022] 
+)
+Select *, ([RollingTicket])/ ([RollingTicket]) * 100 as PercentTicket
+--Select *, COUNT([RollingTicket]) * 100 
+From WeeksVSMonth
+*/
+
+--To create view for later visualization
+
+Drop View HighestLabel_Jan
+Drop View HighestLabel_Apr
+
+--1.Higheset Label Monthly
+Create View HighestLabel_Jan as
+Select ([Labels]), COUNT([Labels]) AS 'Total Ticket', ([Month of Ticket]), ([Year])
+From VicPortfolio..[GiD-jan2022]
+Group by ([Labels]), ([Month of Ticket]), ([Year])
+
+Create View HighestLabel_Feb as
+Select ([Labels]), COUNT([Labels]) AS 'Total Ticket', ([Month of Ticket]), ([Year])
+From VicPortfolio..[GiD-feb2022]
+Group by ([Labels]), ([Month of Ticket]), ([Year])
+
+Create View HighestLabel_Mar as
+Select ([Labels]), COUNT([Labels]) AS 'Total Ticket', ([Month of Ticket]), ([Year])
+From VicPortfolio..[GiD-mar2022]
+Group by ([Labels]), ([Month of Ticket]), ([Year])
+
+Create View HighestLabel_Apr as
+Select ([Labels]), COUNT([Labels]) AS 'Total Ticket', ([Month of Ticket]), ([Year])
+From VicPortfolio..[GiD-apr2022]
+Group by ([Labels]), ([Month of Ticket]), ([Year])
+
+Select *
+From HighestLabel_Jan
+
+Select *
+From HighestLabel_Feb
+
+Select *
+From HighestLabel_Mar
+
+Select *
+From HighestLabel_Apr
+
+
+--2.Monthly Total Ticket
+Create View Jan22 as
+Select ([Month Of Ticket]) ,COUNT([issue id]) AS 'Total Ticket', ([Year])
+From VicPortfolio..[GiD-jan2022]
+Group by ([Month Of Ticket]), ([Year])
+
+Select *
+From Jan22
+
+Create View Feb22 as
+Select ([Month Of Ticket]) ,COUNT([issue id]) AS 'Total Ticket', ([Year])
+From VicPortfolio..[GiD-feb2022]
+Group by ([Month Of Ticket]), ([Year])
+
+Select *
+From Feb22
+
+Create View Mar22 as
+Select ([Month Of Ticket]) ,COUNT([issue id]) AS 'Total Ticket', ([Year])
+From VicPortfolio..[GiD-mar2022]
+Group by ([Month Of Ticket]), ([Year])
+
+Select *
+From Mar22
+
+Create View Apr22 as
+Select ([Month Of Ticket]) ,COUNT([issue id]) AS 'Total Ticket', ([Year])
+From VicPortfolio..[GiD-apr2022]
+Group by ([Month Of Ticket]), ([Year])
+
+Select *
+From Apr22
+
+Drop View Jan22
+Drop View Feb22
+
+--3.Weekly Total Ticket
+--Jan_Week
+Select ([Week]), COUNT([Issue key]) OVER (Partition by ([Week]) ORDER BY ([Week]),([Issue id])) AS 'RollingTicket', 
+([Issue key]),([Issue id]),([Issue Type]),([Status]),([Year]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Created Date])
+From VicPortfolio..[GiD-jan2022] 
+Order By 3,4
+
+Create View Jan_Week as
+Select ([Week]), COUNT([Issue key]) OVER (Partition by ([Week]) ORDER BY ([Week]),([Issue id])) AS 'RollingTicket', 
+([Issue key]),([Issue id]),([Issue Type]),([Status]),([Year]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Created Date])
+From VicPortfolio..[GiD-jan2022] 
+
+Select *
+From Jan_Week
+
+--Feb_Week
+Select ([Week]), COUNT([Issue key]) OVER (Partition by ([Week]) ORDER BY ([Week]),([Issue id])) AS 'RollingTicket', 
+([Issue key]),([Issue id]),([Issue Type]),([Status]),([Year]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Created Date])
+From VicPortfolio..[GiD-feb2022] 
+Order By 3,4
+
+Create View Feb_Week as
+Select ([Week]), COUNT([Issue key]) OVER (Partition by ([Week]) ORDER BY ([Week]),([Issue id])) AS 'RollingTicket', 
+([Issue key]),([Issue id]),([Issue Type]),([Status]),([Year]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Created Date])
+From VicPortfolio..[GiD-feb2022] 
+
+Select *
+From Feb_Week
+
+--Mar_Week
+Select ([Week]), COUNT([Issue key]) OVER (Partition by ([Week]) ORDER BY ([Week]),([Issue id])) AS 'RollingTicket', 
+([Issue key]),([Issue id]),([Issue Type]),([Status]),([Year]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Created Date])
+From VicPortfolio..[GiD-mar2022] 
+Order By 3,4
+
+Create View Mar_Week as
+Select ([Week]), COUNT([Issue key]) OVER (Partition by ([Week]) ORDER BY ([Week]),([Issue id])) AS 'RollingTicket', 
+([Issue key]),([Issue id]),([Issue Type]),([Status]),([Year]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Created Date])
+From VicPortfolio..[GiD-mar2022] 
+
+Select *
+From Mar_Week
+
+--Apr_Week
+Select ([Week]), COUNT([Issue key]) OVER (Partition by ([Week]) ORDER BY ([Week]),([Issue id])) AS 'RollingTicket', 
+([Issue key]),([Issue id]),([Issue Type]),([Status]),([Year]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Created Date])
+From VicPortfolio..[GiD-apr2022] 
+Order By 3,4
+
+Create View Apr_Week as
+Select ([Week]), COUNT([Issue key]) OVER (Partition by ([Week]) ORDER BY ([Week]),([Issue id])) AS 'RollingTicket', 
+([Issue key]),([Issue id]),([Issue Type]),([Status]),([Year]),
+([Assignee]),([Support Level]),([Labels]),([Ticket Types]),([Month of Ticket]),([Created Date])
+From VicPortfolio..[GiD-apr2022] 
+
+Select *
+From Apr_Week
+
+Drop View Feb_Week
+
+
+--4.Total Issue Type Monthly
+--JanIssueType--
+Select ([Issue Type]) ,COUNT([Issue Type]) AS 'TotalIssueType',([Month of Ticket]),([Year])
+From VicPortfolio..[GiD-jan2022]
+Group by ([Issue Type]),([Month of Ticket]),([Year])
+
+Create View JanIssueType as
+Select ([Issue Type]) ,COUNT([Issue Type]) AS 'TotalIssueType',([Month of Ticket]),([Year])
+From VicPortfolio..[GiD-jan2022]
+Group by ([Issue Type]),([Month of Ticket]),([Year])
+
+Select *
+From  JanIssueType
+
+--FebIssueType--
+Select ([Issue Type]) ,COUNT([Issue Type]) AS 'TotalIssueType',([Month of Ticket]),([Year])
+From VicPortfolio..[GiD-feb2022]
+Group by ([Issue Type]),([Month of Ticket]),([Year])
+
+Create View FebIssueType as
+Select ([Issue Type]) ,COUNT([Issue Type]) AS 'TotalIssueType',([Month of Ticket]),([Year])
+From VicPortfolio..[GiD-feb2022]
+Group by ([Issue Type]),([Month of Ticket]),([Year])
+
+Select *
+From  FebIssueType
+
+--MarIssueType--
+Select ([Issue Type]) ,COUNT([Issue Type]) AS 'TotalIssueType',([Month of Ticket]),([Year])
+From VicPortfolio..[GiD-mar2022]
+Group by ([Issue Type]),([Month of Ticket]),([Year])
+
+Create View MarIssueType as
+Select ([Issue Type]) ,COUNT([Issue Type]) AS 'TotalIssueType',([Month of Ticket]),([Year])
+From VicPortfolio..[GiD-mar2022]
+Group by ([Issue Type]),([Month of Ticket]),([Year])
+
+Select *
+From  MarIssueType
+
+--AprIssueType--
+Select ([Issue Type]) ,COUNT([Issue Type]) AS 'TotalIssueType',([Month of Ticket]),([Year])
+From VicPortfolio..[GiD-apr2022]
+Group by ([Issue Type]),([Month of Ticket]),([Year])
+
+Create View AprIssueType as
+Select ([Issue Type]) ,COUNT([Issue Type]) AS 'TotalIssueType',([Month of Ticket]),([Year])
+From VicPortfolio..[GiD-apr2022]
+Group by ([Issue Type]),([Month of Ticket]),([Year])
+
+Select *
+From  AprIssueType
+
+
+--5.Monthly Total Ticket Status
+--JanTicketStatus--
+Select ([Status]), COUNT([Issue key]) AS 'TotalTicket',([Month of Ticket]), ([Year])
+From VicPortfolio..[GiD-jan2022] 
+Group by ([Status]),([Month of Ticket]), ([Year])
+
+Create View JanTicketStatus as
+Select ([Status]), COUNT([Issue key]) AS 'TotalTicket',([Month of Ticket]), ([Year])
+From VicPortfolio..[GiD-jan2022] 
+Group by ([Status]),([Month of Ticket]), ([Year])
+
+Select *
+From JanTicketStatus
+
+--FebTicketStatus--
+Select ([Status]), COUNT([Issue key]) AS 'TotalTicket',([Month of Ticket]), ([Year])
+From VicPortfolio..[GiD-feb2022] 
+Group by ([Status]),([Month of Ticket]), ([Year])
+
+Create View FebTicketStatus as
+Select ([Status]), COUNT([Issue key]) AS 'TotalTicket',([Month of Ticket]), ([Year])
+From VicPortfolio..[GiD-feb2022] 
+Group by ([Status]),([Month of Ticket]), ([Year])
+
+Select *
+From FebTicketStatus
+
+--MarTicketStatus--
+Select ([Status]), COUNT([Issue key]) AS 'TotalTicket',([Month of Ticket]), ([Year])
+From VicPortfolio..[GiD-mar2022] 
+Group by ([Status]),([Month of Ticket]), ([Year])
+
+Create View MarTicketStatus as
+Select ([Status]), COUNT([Issue key]) AS 'TotalTicket',([Month of Ticket]), ([Year])
+From VicPortfolio..[GiD-mar2022] 
+Group by ([Status]),([Month of Ticket]), ([Year])
+
+Select *
+From MarTicketStatus
+
+
+--AprTicketStatus--
+Select ([Status]), COUNT([Issue key]) AS 'TotalTicket',([Month of Ticket]), ([Year])
+From VicPortfolio..[GiD-apr2022] 
+Group by ([Status]),([Month of Ticket]), ([Year])
+
+Create View AprTicketStatus as
+Select ([Status]), COUNT([Issue key]) AS 'TotalTicket',([Month of Ticket]), ([Year])
+From VicPortfolio..[GiD-apr2022] 
+Group by ([Status]),([Month of Ticket]), ([Year])
+
+Select *
+From AprTicketStatus
+
