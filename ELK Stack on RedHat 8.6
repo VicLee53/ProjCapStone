@@ -1,0 +1,97 @@
+#The implementation of ELK stack-Elasticsearch, Kibana and Metricbeat was setup inside a Virtual Machine.  
+#Below are the steps to startup all the 3 services running on Red Hat Enterprise Linux 8.6 inside Oracle VM VirtualBox.
+
+#Startup of ElasticSearch (prior the elasticsearch package has been installed,authenthication to elasticsearch localhost with SSL cert and username password has been configured and yaml file has been configured)
+
+[root@localhost ~]# systemctl daemon-reload
+[root@localhost ~]# 
+[root@localhost ~]# systemctl enable elasticsearch.service
+[root@localhost ~]# 
+[root@localhost ~]# systemctl start elasticsearch.service
+[root@localhost ~]# 
+[root@localhost ~]# systemctl status elasticsearch.service
+● elasticsearch.service - Elasticsearch
+   Loaded: loaded (/usr/lib/systemd/system/elasticsearch.service; enabled; vendor preset: disabled)
+   Active: active (running) since Sun 2023-07-09 17:55:04 +08; 4h 1min ago
+     Docs: https://www.elastic.co
+ Main PID: 3854 (java)
+    Tasks: 90 (limit: 30169)
+   Memory: 1.9G
+   CGroup: /system.slice/elasticsearch.service
+           ├─3854 /usr/share/elasticsearch/jdk/bin/java -Xshare:auto -Des.networkaddress.cache.ttl=60 -Des.networkaddress.cache.negative.ttl=10 -Djava.security.manager=allow -XX:+AlwaysPreTouch -Xss1m -Djava.aw>
+           └─4145 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-x86_64/bin/controller
+
+Jul 09 17:54:48 localhost.localdomain systemd[1]: Starting Elasticsearch...
+Jul 09 17:55:04 localhost.localdomain systemd[1]: Started Elasticsearch.
+
+
+
+#The authentication to connect to elasticsearch localhost, enter the password for the elastic user when prompted and output will be as shown below:
+
+[root@localhost ~]# curl --cacert /etc/elasticsearch/certs/http_ca.crt -u elastic https://localhost:9200
+Enter host password for user 'elastic':
+{
+  "name" : "localhost.localdomain",
+  "cluster_name" : "elasticsearch",
+  "cluster_uuid" : "gPXBRodLQZeDMenKkrY3pQ",
+  "version" : {
+    "number" : "8.1.0",
+    "build_flavor" : "default",
+    "build_type" : "rpm",
+    "build_hash" : "3700f7679f7d95e36da0b43762189bab189bc53a",
+    "build_date" : "2022-03-03T14:20:00.690422633Z",
+    "build_snapshot" : false,
+    "lucene_version" : "9.0.0",
+    "minimum_wire_compatibility_version" : "7.17.0",
+    "minimum_index_compatibility_version" : "7.0.0"
+  },
+  "tagline" : "You Know, for Search"
+}
+[root@localhost ~]#
+
+
+
+#Startup of Kibana (prior the Kibana package has been installed,authenthication to Kibana localhost with enrolled password has been configured and yaml file has been configured)
+
+[root@localhost ~]# systemctl daemon-reload
+[root@localhost ~]# 
+[root@localhost ~]# systemctl enable kibana
+[root@localhost ~]# 
+[root@localhost ~]# systemctl start kibana
+[root@localhost ~]# 
+[root@localhost ~]# systemctl status kibana
+● kibana.service - Kibana
+   Loaded: loaded (/usr/lib/systemd/system/kibana.service; enabled; vendor preset: disabled)
+   Active: active (running) since Sun 2023-07-09 18:06:12 +08; 4h 9min ago
+     Docs: https://www.elastic.co
+ Main PID: 5016 (node)
+    Tasks: 11 (limit: 30169)
+   Memory: 557.7M
+   CGroup: /system.slice/kibana.service
+           └─5016 /usr/share/kibana/bin/../node/bin/node /usr/share/kibana/bin/../src/cli/dist
+
+Jul 09 18:08:28 localhost.localdomain kibana[5016]: [2023-07-09T18:08:28.401+08:00][WARN ][plugins.screenshotting.chromium] Enabling the Chromium sandbox provides an additional layer of protection.
+Jul 09 18:08:29 localhost.localdomain kibana[5016]: [2023-07-09T18:08:29.765+08:00][INFO ][plugins.ruleRegistry] Installed resources for index .preview.alerts-security.alerts
+Jul 09 18:08:30 localhost.localdomain kibana[5016]: [2023-07-09T18:08:30.207+08:00][INFO ][plugins.fleet] Fleet setup completed
+Jul 09 18:08:30 localhost.localdomain kibana[5016]: [2023-07-09T18:08:30.224+08:00][INFO ][plugins.securitySolution] Dependent plugin setup complete - Starting ManifestTask
+Jul 09 18:08:31 localhost.localdomain kibana[5016]: [2023-07-09T18:08:31.377+08:00][INFO ][status] Kibana is now available (was degraded)
+Jul 09 18:08:31 localhost.localdomain kibana[5016]: [2023-07-09T18:08:31.505+08:00][INFO ][plugins.reporting.store] Creating ILM policy for managing reporting indices: kibana-reporting
+Jul 09 18:08:36 localhost.localdomain kibana[5016]: [2023-07-09T18:08:36.237+08:00][INFO ][plugins.security.routes] Logging in with provider "basic" (basic)
+Jul 09 18:09:02 localhost.localdomain kibana[5016]: [2023-07-09T18:09:02.446+08:00][INFO ][plugins.security.routes] Logging in with provider "basic" (basic)
+Jul 09 20:08:29 localhost.localdomain kibana[5016]: [2023-07-09T20:08:29.244+08:00][INFO ][plugins.securitySolution.endpoint:metadata-check-transforms-task:0.0.1] no endpoint installation found
+Jul 09 22:08:31 localhost.localdomain kibana[5016]: [2023-07-09T22:08:31.866+08:00][INFO ][plugins.securitySolution.endpoint:metadata-check-transforms-task:0.0.1] no endpoint installation found
+[root@localhost ~]# 
+
+
+
+#Startup of Metricbeat(Prior connect to the Elastic Stack. Connections to Elasticsearch and Kibana are required to set up Metricbeat and yaml file has been configured)
+
+[root@localhost ~]# 
+[root@localhost ~]# service metricbeat start
+Starting metricbeat (via systemctl):                       [  OK  ]
+[root@localhost ~]# 
+
+
+#Open Firefox and goto http://localhost:5601.
+#Enter the elastic username and password which has been saved earlier on.
+#You should see the Kibana homepage and can start to import data by creating chart types for the visualization and setup the dashboard.
