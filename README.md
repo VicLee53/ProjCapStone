@@ -1,2 +1,2 @@
 # Kibana Dashbaord
-![Kibana_GiD_Overview Dashboard_1](https://github.com/VicLee53/ProjCapStone/assets/137000117/e18c53ad-0b3d-4202-aef7-9efc6f8d5644)
+![Kibana_GiD_Overview Dashboard_1](https://github.com/VicLee53/ProjCapStone/assets/137000117/d7719203-a0d7-42ac-ab7e-e546a6b9a4d3)
